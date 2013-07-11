@@ -33,11 +33,11 @@ See the [demo page of Mattia Larentis](http://www.larentis.eu/switch/) for examp
 
 ## Changes
 
-    | Version | Notes                                                                               |
-    |---------+-------------------------------------------------------------------------------------|
-    |   1.4.0 | Update to v1.4 of the bootstrap-switch plugin and make version equal to the plugin  |
-    |   0.1.1 | Update to v1.3 of the bootstrap-switch plugin                                       |
-    |   0.1.0 | Initial release                                                                     |
+| Version | Notes                                                                               |
+| -------:| ----------------------------------------------------------------------------------- |
+|   1.4.0 | Update to v1.4 of the bootstrap-switch plugin and make version equal to the plugin  |
+|   0.1.1 | Update to v1.3 of the bootstrap-switch plugin                                       |
+|   0.1.0 | Initial release                                                                     |
 
 ## License
 
