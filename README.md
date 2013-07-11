@@ -35,6 +35,7 @@ See the [demo page of Mattia Larentis](http://www.larentis.eu/switch/) for examp
 
     | Version | Notes                                                                     |
     |---------+---------------------------------------------------------------------------|
+    |   0.1.4 | Update to v1.4 of the bootstrap-switch plugin
     |   0.1.1 | Update to v1.3 of the bootstrap-switch plugin                             |
     |   0.1.0 | Initial release                                                           |
 
