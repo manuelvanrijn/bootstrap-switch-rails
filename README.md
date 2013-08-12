@@ -25,8 +25,6 @@ In your `application.css`, include the following:
 
 ```css
  *= require bootstrap-switch
-// optionaly you could add the flat-ui icons
-
 ```
 
 ## Examples
