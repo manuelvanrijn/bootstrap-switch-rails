@@ -27,6 +27,12 @@ In your `application.css`, include the following:
  *= require bootstrap-switch
 ```
 
+or in any `SASS` file, include the following:
+
+```css
+@import "bootstrap-switch";
+```
+
 ## Examples
 
 See the [demo page of Mattia Larentis](http://www.bootstrap-switch.org/) for examples how to use the plugin
