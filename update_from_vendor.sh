@@ -6,9 +6,10 @@ git clone https://github.com/nostalgiaz/bootstrap-switch.git tmp_vendor
 
 # Copy files
 echo "Copying bootstrap-switch.js"
-cp tmp_vendor/static/js/bootstrap-switch.js vendor/assets/javascripts/bootstrap-switch.js
-echo "Copying bootstrap-switch.css"
-cp tmp_vendor/static/stylesheets/bootstrap-switch.css vendor/assets/stylesheets/bootstrap-switch.css.scss
+cp tmp_vendor/build/js/bootstrap-switch.js vendor/assets/javascripts/bootstrap-switch.js
+echo "Copying bootstrap-switch.css files"
+cp tmp_vendor/build/css/bootstrap2/bootstrap-switch.css vendor/assets/stylesheets/bootstrap2-switch.css.scss
+cp tmp_vendor/build/css/bootstrap3/bootstrap-switch.css vendor/assets/stylesheets/bootstrap3-switch.css.scss
 
 # Delete vendor repo
 echo "Removing cloned vendor repo"

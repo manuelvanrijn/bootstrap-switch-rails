@@ -24,13 +24,24 @@ In your `application.js`, include the following:
 In your `application.css`, include the following:
 
 ```css
+/*
+ * for bootstrap3
+ *= require bootstrap3-switch
+ *
+ * or for bootstrap2
+ *= require bootstrap2-switch
+ */
+
  *= require bootstrap-switch
 ```
 
 or in any `SASS` file, include the following:
 
 ```css
-@import "bootstrap-switch";
+/* for bootstrap3 */
+@import "bootstrap3-switch";
+/* or for bootstrap2 */
+@import "bootstrap2-switch";
 ```
 
 ## Examples
@@ -41,6 +52,7 @@ See the [demo page of Mattia Larentis](http://www.bootstrap-switch.org/) for exa
 
 | Version | Notes                                                                               |
 | -------:| ----------------------------------------------------------------------------------- |
+|   1.9.0 | Update to v1.9 of the bootstrap-switch plugin                                       |
 |   1.8.0 | Update to v1.8 of the bootstrap-switch plugin                                       |
 |   1.4.0 | Update to v1.4 of the bootstrap-switch plugin and make version equal to the plugin  |
 |   0.1.1 | Update to v1.3 of the bootstrap-switch plugin                                       |
