@@ -52,6 +52,7 @@ See the [demo page of Mattia Larentis](http://www.bootstrap-switch.org/) for exa
 
 | Version | Notes                                                                               |
 | -------:| ----------------------------------------------------------------------------------- |
+|   2.0.2 | Fixed issue where bootstrap 2 sass wasn't compiling (issue #7)                      |
 |   2.0.1 | Update to v2.0.1 of the bootstrap-switch plugin                                     |
 |   2.0.0 | Update to v2.0 of the bootstrap-switch plugin                                       |
 |   1.9.0 | Update to v1.9 of the bootstrap-switch plugin                                       |
