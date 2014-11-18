@@ -48,22 +48,6 @@ or in any `SASS` file, include the following:
 
 See the [demo page of Mattia Larentis](http://www.bootstrap-switch.org/) for examples how to use the plugin
 
-## Changes
-
-| Version | Notes                                                                               |
-| -------:| ----------------------------------------------------------------------------------- |
-|   3.1.2 | Update to v3.1.2 of the bootstrap-switch plugin                                     |
-|   3.0.2 | Update to v3.0.2 of the bootstrap-switch plugin                                     |
-|   3.0.0 | Update to v3.0.0 of the bootstrap-switch plugin                                     |
-|   2.0.2 | Fixed issue where bootstrap 2 sass wasn't compiling (issue #7)                      |
-|   2.0.1 | Update to v2.0.1 of the bootstrap-switch plugin                                     |
-|   2.0.0 | Update to v2.0 of the bootstrap-switch plugin                                       |
-|   1.9.0 | Update to v1.9 of the bootstrap-switch plugin                                       |
-|   1.8.0 | Update to v1.8 of the bootstrap-switch plugin                                       |
-|   1.4.0 | Update to v1.4 of the bootstrap-switch plugin and make version equal to the plugin  |
-|   0.1.1 | Update to v1.3 of the bootstrap-switch plugin                                       |
-|   0.1.0 | Initial release                                                                     |
-
 ## License
 
 * The [bootstrap-switch](http://www.bootstrap-switch.org/) plugin is licensed under the

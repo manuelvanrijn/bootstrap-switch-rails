@@ -1,5 +1,5 @@
 /* ========================================================================
- * bootstrap-switch - v3.1.0
+ * bootstrap-switch - v3.2.2
  * http://www.bootstrap-switch.org
  * ========================================================================
  * Copyright 2012-2013 Mattia Larentis
@@ -45,6 +45,8 @@
           onText: this.$element.data("on-text"),
           offText: this.$element.data("off-text"),
           labelText: this.$element.data("label-text"),
+          handleWidth: this.$element.data("handle-width"),
+          labelWidth: this.$element.data("label-width"),
           baseClass: this.$element.data("base-class"),
           wrapperClass: this.$element.data("wrapper-class")
         }, options);
@@ -56,9 +58,6 @@
               classes.push(_this.options.state ? "" + _this.options.baseClass + "-on" : "" + _this.options.baseClass + "-off");
               if (_this.options.size != null) {
                 classes.push("" + _this.options.baseClass + "-" + _this.options.size);
-              }
-              if (_this.options.animate) {
-                classes.push("" + _this.options.baseClass + "-animate");
               }
               if (_this.options.disabled) {
                 classes.push("" + _this.options.baseClass + "-disabled");
@@ -90,13 +89,10 @@
           html: this.options.offText,
           "class": "" + this.options.baseClass + "-handle-off " + this.options.baseClass + "-" + this.options.offColor
         });
-        this.$label = $("<label>", {
+        this.$label = $("<span>", {
           html: this.options.labelText,
           "class": "" + this.options.baseClass + "-label"
         });
-        if (this.options.indeterminate) {
-          this.$element.prop("indeterminate", true);
-        }
         this.$element.on("init.bootstrapSwitch", (function(_this) {
           return function() {
             return _this.options.onInit.apply(element, arguments);
@@ -109,11 +105,24 @@
         })(this));
         this.$container = this.$element.wrap(this.$container).parent();
         this.$wrapper = this.$container.wrap(this.$wrapper).parent();
-        this.$element.before(this.options.inverse ? this.$off : this.$on).before(this.$label).before(this.options.inverse ? this.$on : this.$off).trigger("init.bootstrapSwitch");
+        this.$element.before(this.options.inverse ? this.$off : this.$on).before(this.$label).before(this.options.inverse ? this.$on : this.$off);
+        if (this.options.indeterminate) {
+          this.$element.prop("indeterminate", true);
+        }
+        this._initWidth();
+        this._containerPosition(this.options.state, (function(_this) {
+          return function() {
+            if (_this.options.animate) {
+              return _this.$wrapper.addClass("" + _this.options.baseClass + "-animate");
+            }
+          };
+        })(this));
         this._elementHandlers();
         this._handleHandlers();
         this._labelHandlers();
         this._formHandler();
+        this._externalLabelHandler();
+        this.$element.trigger("init.bootstrapSwitch");
       }
 
       BootstrapSwitch.prototype._constructor = BootstrapSwitch;
@@ -125,7 +134,7 @@
         if (this.options.disabled || this.options.readonly) {
           return this.$element;
         }
-        if (this.options.state && !this.options.radioAllOff && this.$element.is(':radio')) {
+        if (this.options.state && !this.options.radioAllOff && this.$element.is(":radio")) {
           return this.$element;
         }
         if (this.options.indeterminate) {
@@ -160,6 +169,7 @@
         if (value) {
           this.$wrapper.addClass("" + this.options.baseClass + "-" + value);
         }
+        this._width();
         this.options.size = value;
         return this.$element;
       };
@@ -169,14 +179,15 @@
           return this.options.animate;
         }
         value = !!value;
-        this.$wrapper[value ? "addClass" : "removeClass"]("" + this.options.baseClass + "-animate");
-        this.options.animate = value;
-        return this.$element;
+        if (value === this.options.animate) {
+          return this.$element;
+        }
+        return this.toggleAnimate();
       };
 
       BootstrapSwitch.prototype.toggleAnimate = function() {
-        this.$wrapper.toggleClass("" + this.options.baseClass + "-animate");
         this.options.animate = !this.options.animate;
+        this.$wrapper.toggleClass("" + this.options.baseClass + "-animate");
         return this.$element;
       };
 
@@ -185,16 +196,16 @@
           return this.options.disabled;
         }
         value = !!value;
-        this.$wrapper[value ? "addClass" : "removeClass"]("" + this.options.baseClass + "-disabled");
-        this.$element.prop("disabled", value);
-        this.options.disabled = value;
-        return this.$element;
+        if (value === this.options.disabled) {
+          return this.$element;
+        }
+        return this.toggleDisabled();
       };
 
       BootstrapSwitch.prototype.toggleDisabled = function() {
-        this.$element.prop("disabled", !this.options.disabled);
-        this.$wrapper.toggleClass("" + this.options.baseClass + "-disabled");
         this.options.disabled = !this.options.disabled;
+        this.$element.prop("disabled", this.options.disabled);
+        this.$wrapper.toggleClass("" + this.options.baseClass + "-disabled");
         return this.$element;
       };
 
@@ -203,16 +214,16 @@
           return this.options.readonly;
         }
         value = !!value;
-        this.$wrapper[value ? "addClass" : "removeClass"]("" + this.options.baseClass + "-readonly");
-        this.$element.prop("readonly", value);
-        this.options.readonly = value;
-        return this.$element;
+        if (value === this.options.readonly) {
+          return this.$element;
+        }
+        return this.toggleReadonly();
       };
 
       BootstrapSwitch.prototype.toggleReadonly = function() {
-        this.$element.prop("readonly", !this.options.readonly);
-        this.$wrapper.toggleClass("" + this.options.baseClass + "-readonly");
         this.options.readonly = !this.options.readonly;
+        this.$element.prop("readonly", this.options.readonly);
+        this.$wrapper.toggleClass("" + this.options.baseClass + "-readonly");
         return this.$element;
       };
 
@@ -221,34 +232,29 @@
           return this.options.indeterminate;
         }
         value = !!value;
-        this.$wrapper[value ? "addClass" : "removeClass"]("" + this.options.baseClass + "-indeterminate");
-        this.$element.prop("indeterminate", value);
-        this.options.indeterminate = value;
-        return this.$element;
+        if (value === this.options.indeterminate) {
+          return this.$element;
+        }
+        return this.toggleIndeterminate();
       };
 
       BootstrapSwitch.prototype.toggleIndeterminate = function() {
-        this.$element.prop("indeterminate", !this.options.indeterminate);
-        this.$wrapper.toggleClass("" + this.options.baseClass + "-indeterminate");
         this.options.indeterminate = !this.options.indeterminate;
+        this.$element.prop("indeterminate", this.options.indeterminate);
+        this.$wrapper.toggleClass("" + this.options.baseClass + "-indeterminate");
+        this._containerPosition();
         return this.$element;
       };
 
       BootstrapSwitch.prototype.inverse = function(value) {
-        var $off, $on;
         if (typeof value === "undefined") {
           return this.options.inverse;
         }
         value = !!value;
-        this.$wrapper[value ? "addClass" : "removeClass"]("" + this.options.baseClass + "-inverse");
-        $on = this.$on.clone(true);
-        $off = this.$off.clone(true);
-        this.$on.replaceWith($off);
-        this.$off.replaceWith($on);
-        this.$on = $off;
-        this.$off = $on;
-        this.options.inverse = value;
-        return this.$element;
+        if (value === this.options.inverse) {
+          return this.$element;
+        }
+        return this.toggleInverse();
       };
 
       BootstrapSwitch.prototype.toggleInverse = function() {
@@ -297,6 +303,8 @@
           return this.options.onText;
         }
         this.$on.html(value);
+        this._width();
+        this._containerPosition();
         this.options.onText = value;
         return this.$element;
       };
@@ -306,6 +314,8 @@
           return this.options.offText;
         }
         this.$off.html(value);
+        this._width();
+        this._containerPosition();
         this.options.offText = value;
         return this.$element;
       };
@@ -315,7 +325,28 @@
           return this.options.labelText;
         }
         this.$label.html(value);
+        this._width();
         this.options.labelText = value;
+        return this.$element;
+      };
+
+      BootstrapSwitch.prototype.handleWidth = function(value) {
+        if (typeof value === "undefined") {
+          return this.options.handleWidth;
+        }
+        this.options.handleWidth = value;
+        this._width();
+        this._containerPosition();
+        return this.$element;
+      };
+
+      BootstrapSwitch.prototype.labelWidth = function(value) {
+        if (typeof value === "undefined") {
+          return this.options.labelWidth;
+        }
+        this.options.labelWidth = value;
+        this._width();
+        this._containerPosition();
         return this.$element;
       };
 
@@ -339,6 +370,10 @@
       BootstrapSwitch.prototype.radioAllOff = function(value) {
         if (typeof value === "undefined") {
           return this.options.radioAllOff;
+        }
+        value = !!value;
+        if (value === this.options.radioAllOff) {
+          return this.$element;
         }
         this.options.radioAllOff = value;
         return this.$element;
@@ -377,24 +412,100 @@
         return this.$element;
       };
 
+      BootstrapSwitch.prototype._width = function() {
+        var $handles, handleWidth;
+        $handles = this.$on.add(this.$off);
+        $handles.add(this.$label).css("width", "");
+        handleWidth = this.options.handleWidth === "auto" ? Math.max(this.$on.width(), this.$off.width()) : this.options.handleWidth;
+        $handles.width(handleWidth);
+        this.$label.width((function(_this) {
+          return function(index, width) {
+            if (_this.options.labelWidth !== "auto") {
+              return _this.options.labelWidth;
+            }
+            if (width < handleWidth) {
+              return handleWidth;
+            } else {
+              return width;
+            }
+          };
+        })(this));
+        this._handleWidth = this.$on.outerWidth();
+        this._labelWidth = this.$label.outerWidth();
+        this.$container.width((this._handleWidth * 2) + this._labelWidth);
+        return this.$wrapper.width(this._handleWidth + this._labelWidth);
+      };
+
+      BootstrapSwitch.prototype._initWidth = function() {
+        var widthInterval;
+        if (this.$wrapper.is(":visible")) {
+          return this._width();
+        }
+        return widthInterval = window.setInterval((function(_this) {
+          return function() {
+            if (_this.$wrapper.is(":visible")) {
+              _this._width();
+              return window.clearInterval(widthInterval);
+            }
+          };
+        })(this), 50);
+      };
+
+      BootstrapSwitch.prototype._containerPosition = function(state, callback) {
+        if (state == null) {
+          state = this.options.state;
+        }
+        this.$container.css("margin-left", (function(_this) {
+          return function() {
+            var values;
+            values = [0, "-" + _this._handleWidth + "px"];
+            if (_this.options.indeterminate) {
+              return "-" + (_this._handleWidth / 2) + "px";
+            }
+            if (state) {
+              if (_this.options.inverse) {
+                return values[1];
+              } else {
+                return values[0];
+              }
+            } else {
+              if (_this.options.inverse) {
+                return values[0];
+              } else {
+                return values[1];
+              }
+            }
+          };
+        })(this));
+        if (!callback) {
+          return;
+        }
+        if ($.support.transition) {
+          return this.$container.one("bsTransitionEnd", callback).emulateTransitionEnd(500);
+        } else {
+          return callback();
+        }
+      };
+
       BootstrapSwitch.prototype._elementHandlers = function() {
         return this.$element.on({
           "change.bootstrapSwitch": (function(_this) {
             return function(e, skip) {
-              var checked;
+              var state;
               e.preventDefault();
               e.stopImmediatePropagation();
-              checked = _this.$element.is(":checked");
-              if (checked === _this.options.state) {
+              state = _this.$element.is(":checked");
+              _this._containerPosition(state);
+              if (state === _this.options.state) {
                 return;
               }
-              _this.options.state = checked;
-              _this.$wrapper.removeClass(checked ? "" + _this.options.baseClass + "-off" : "" + _this.options.baseClass + "-on").addClass(checked ? "" + _this.options.baseClass + "-on" : "" + _this.options.baseClass + "-off");
+              _this.options.state = state;
+              _this.$wrapper.toggleClass("" + _this.options.baseClass + "-off").toggleClass("" + _this.options.baseClass + "-on");
               if (!skip) {
                 if (_this.$element.is(":radio")) {
                   $("[name='" + (_this.$element.attr('name')) + "']").not(_this.$element).prop("checked", false).trigger("change.bootstrapSwitch", true);
                 }
-                return _this.$element.trigger("switchChange.bootstrapSwitch", [checked]);
+                return _this.$element.trigger("switchChange.bootstrapSwitch", [state]);
               }
             };
           })(this),
@@ -447,59 +558,52 @@
 
       BootstrapSwitch.prototype._labelHandlers = function() {
         return this.$label.on({
-          "mousemove.bootstrapSwitch touchmove.bootstrapSwitch": (function(_this) {
+          "mousedown.bootstrapSwitch touchstart.bootstrapSwitch": (function(_this) {
             return function(e) {
-              var left, pageX, percent, right;
-              if (!_this.isLabelDragging) {
+              if (_this._dragStart || _this.options.disabled || _this.options.readonly) {
                 return;
               }
               e.preventDefault();
-              _this.isLabelDragged = true;
-              pageX = e.pageX || e.originalEvent.touches[0].pageX;
-              percent = ((pageX - _this.$wrapper.offset().left) / _this.$wrapper.width()) * 100;
-              left = 25;
-              right = 75;
+              _this._dragStart = (e.pageX || e.originalEvent.touches[0].pageX) - parseInt(_this.$container.css("margin-left"), 10);
               if (_this.options.animate) {
                 _this.$wrapper.removeClass("" + _this.options.baseClass + "-animate");
               }
-              if (percent < left) {
-                percent = left;
-              } else if (percent > right) {
-                percent = right;
-              }
-              _this.$container.css("margin-left", "" + (percent - right) + "%");
               return _this.$element.trigger("focus.bootstrapSwitch");
             };
           })(this),
-          "mousedown.bootstrapSwitch touchstart.bootstrapSwitch": (function(_this) {
+          "mousemove.bootstrapSwitch touchmove.bootstrapSwitch": (function(_this) {
             return function(e) {
-              if (_this.isLabelDragging || _this.options.disabled || _this.options.readonly) {
+              var difference;
+              if (_this._dragStart == null) {
                 return;
               }
               e.preventDefault();
-              _this.isLabelDragging = true;
-              return _this.$element.trigger("focus.bootstrapSwitch");
+              difference = (e.pageX || e.originalEvent.touches[0].pageX) - _this._dragStart;
+              if (difference < -_this._handleWidth || difference > 0) {
+                return;
+              }
+              _this._dragEnd = difference;
+              return _this.$container.css("margin-left", "" + _this._dragEnd + "px");
             };
           })(this),
           "mouseup.bootstrapSwitch touchend.bootstrapSwitch": (function(_this) {
             return function(e) {
               var state;
-              if (!_this.isLabelDragging) {
+              if (!_this._dragStart) {
                 return;
               }
               e.preventDefault();
-              if (_this.isLabelDragged) {
-                state = parseInt(_this.$container.css("margin-left"), 10) > -(_this.$container.width() / 6);
-                _this.isLabelDragged = false;
+              if (_this.options.animate) {
+                _this.$wrapper.addClass("" + _this.options.baseClass + "-animate");
+              }
+              if (_this._dragEnd) {
+                state = _this._dragEnd > -(_this._handleWidth / 2);
+                _this._dragEnd = false;
                 _this.state(_this.options.inverse ? !state : state);
-                if (_this.options.animate) {
-                  _this.$wrapper.addClass("" + _this.options.baseClass + "-animate");
-                }
-                _this.$container.css("margin-left", "");
               } else {
                 _this.state(!_this.options.state);
               }
-              return _this.isLabelDragging = false;
+              return _this._dragStart = false;
             };
           })(this),
           "mouseleave.bootstrapSwitch": (function(_this) {
@@ -508,6 +612,20 @@
             };
           })(this)
         });
+      };
+
+      BootstrapSwitch.prototype._externalLabelHandler = function() {
+        var $externalLabel;
+        $externalLabel = this.$element.closest("label");
+        return $externalLabel.on("click", (function(_this) {
+          return function(event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            if (event.target === $externalLabel[0]) {
+              return _this.toggleState();
+            }
+          };
+        })(this));
       };
 
       BootstrapSwitch.prototype._formHandler = function() {
@@ -575,6 +693,8 @@
       onText: "ON",
       offText: "OFF",
       labelText: "&nbsp;",
+      handleWidth: "auto",
+      labelWidth: "auto",
       baseClass: "bootstrap-switch",
       wrapperClass: "wrapper",
       onInit: function() {},
