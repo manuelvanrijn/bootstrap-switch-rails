@@ -1,5 +1,5 @@
 /* ========================================================================
- * bootstrap-switch - v3.2.2
+ * bootstrap-switch - v3.3.0
  * http://www.bootstrap-switch.org
  * ========================================================================
  * Copyright 2012-2013 Mattia Larentis
@@ -27,6 +27,7 @@
     var BootstrapSwitch;
     BootstrapSwitch = (function() {
       function BootstrapSwitch(element, options) {
+        var initInterval;
         if (options == null) {
           options = {};
         }
@@ -109,14 +110,19 @@
         if (this.options.indeterminate) {
           this.$element.prop("indeterminate", true);
         }
-        this._initWidth();
-        this._containerPosition(this.options.state, (function(_this) {
+        initInterval = window.setInterval((function(_this) {
           return function() {
-            if (_this.options.animate) {
-              return _this.$wrapper.addClass("" + _this.options.baseClass + "-animate");
+            if (_this.$wrapper.is(":visible")) {
+              _this._width();
+              _this._containerPosition(null, function() {
+                if (_this.options.animate) {
+                  return _this.$wrapper.addClass("" + _this.options.baseClass + "-animate");
+                }
+              });
+              return window.clearInterval(initInterval);
             }
           };
-        })(this));
+        })(this), 50);
         this._elementHandlers();
         this._handleHandlers();
         this._labelHandlers();
@@ -139,10 +145,8 @@
         }
         if (this.options.indeterminate) {
           this.indeterminate(false);
-          value = true;
-        } else {
-          value = !!value;
         }
+        value = !!value;
         this.$element.prop("checked", value).trigger("change.bootstrapSwitch", skip);
         return this.$element;
       };
@@ -170,6 +174,7 @@
           this.$wrapper.addClass("" + this.options.baseClass + "-" + value);
         }
         this._width();
+        this._containerPosition();
         this.options.size = value;
         return this.$element;
       };
@@ -436,21 +441,6 @@
         return this.$wrapper.width(this._handleWidth + this._labelWidth);
       };
 
-      BootstrapSwitch.prototype._initWidth = function() {
-        var widthInterval;
-        if (this.$wrapper.is(":visible")) {
-          return this._width();
-        }
-        return widthInterval = window.setInterval((function(_this) {
-          return function() {
-            if (_this.$wrapper.is(":visible")) {
-              _this._width();
-              return window.clearInterval(widthInterval);
-            }
-          };
-        })(this), 50);
-      };
-
       BootstrapSwitch.prototype._containerPosition = function(state, callback) {
         if (state == null) {
           state = this.options.state;
@@ -480,11 +470,9 @@
         if (!callback) {
           return;
         }
-        if ($.support.transition) {
-          return this.$container.one("bsTransitionEnd", callback).emulateTransitionEnd(500);
-        } else {
+        return setTimeout(function() {
           return callback();
-        }
+        }, 50);
       };
 
       BootstrapSwitch.prototype._elementHandlers = function() {
@@ -505,8 +493,8 @@
                 if (_this.$element.is(":radio")) {
                   $("[name='" + (_this.$element.attr('name')) + "']").not(_this.$element).prop("checked", false).trigger("change.bootstrapSwitch", true);
                 }
-                return _this.$element.trigger("switchChange.bootstrapSwitch", [state]);
               }
+              return _this.$element.trigger("switchChange.bootstrapSwitch", [state]);
             };
           })(this),
           "focus.bootstrapSwitch": (function(_this) {
@@ -543,13 +531,17 @@
 
       BootstrapSwitch.prototype._handleHandlers = function() {
         this.$on.on("click.bootstrapSwitch", (function(_this) {
-          return function(e) {
+          return function(event) {
+            event.preventDefault();
+            event.stopPropagation();
             _this.state(false);
             return _this.$element.trigger("focus.bootstrapSwitch");
           };
         })(this));
         return this.$off.on("click.bootstrapSwitch", (function(_this) {
-          return function(e) {
+          return function(event) {
+            event.preventDefault();
+            event.stopPropagation();
             _this.state(true);
             return _this.$element.trigger("focus.bootstrapSwitch");
           };
@@ -564,6 +556,7 @@
                 return;
               }
               e.preventDefault();
+              e.stopPropagation();
               _this._dragStart = (e.pageX || e.originalEvent.touches[0].pageX) - parseInt(_this.$container.css("margin-left"), 10);
               if (_this.options.animate) {
                 _this.$wrapper.removeClass("" + _this.options.baseClass + "-animate");
