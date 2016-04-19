@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "bootstrap-switch-rails"
   spec.version       = Bootstrap::Switch::Rails::VERSION
   spec.authors       = ["Manuel van Rijn"]
-  spec.email         = ["manuel@manuelles.nl"]
+  spec.email         = ["manuel@manuelvanrijn.nl"]
   spec.description   = %q{A small gem for putting bootstrap-switch into the Rails asset pipeline}
   spec.summary       = %q{an asset gemification of the bootstrap-switch plugin}
   spec.homepage      = "https://github.com/manuelvanrijn/bootstrap-switch-rails"
