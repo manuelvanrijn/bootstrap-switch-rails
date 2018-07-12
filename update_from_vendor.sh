@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Checkout vendor repo
-echo "Cloning nostalgiaz/bootstrap-switch github repo into tmp_vendor"
-git clone https://github.com/nostalgiaz/bootstrap-switch.git tmp_vendor
+echo "Cloning Bttstrp/bootstrap-switch github repo into tmp_vendor"
+git clone https://github.com/Bttstrp/bootstrap-switch.git tmp_vendor
 
 # Copy files
 echo "Copying bootstrap-switch.js"

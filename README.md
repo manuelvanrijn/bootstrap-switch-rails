@@ -1,6 +1,6 @@
 # bootstrap-switch-rails [![Gem Version](https://badge.fury.io/rb/bootstrap-switch-rails.png)](http://badge.fury.io/rb/bootstrap-switch-rails)
 
-bootstrap-switch-rails provides the [bootstrap-switch](http://bootstrapswitch.com/)
+bootstrap-switch-rails provides the [bootstrap-switch](http://bootstrapswitch.site/)
 plugin as a Rails engine to use it within the asset pipeline.
 
 ## Installation
@@ -46,11 +46,11 @@ or in any `SASS` file, include the following:
 
 ## Examples
 
-See the [demo page of Mattia Larentis](http://bootstrapswitch.com/examples.html) for examples how to use the plugin
+See the [demo page](http://bootstrapswitch.site/examples.html) for examples how to use the plugin
 
 ## License
 
-* The [bootstrap-switch](http://bootstrapswitch.com/) plugin is licensed under the
+* The [bootstrap-switch](http://bootstrapswitch.site/) plugin is licensed under the
 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 * The [bootstrap-switch-rails](https://github.com/manuelvanrijn/bootstrap-switch-rails) project is
  licensed under the [MIT License](http://opensource.org/licenses/mit-license.html)
